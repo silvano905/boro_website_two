@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% load bootstrap4 %}
+{% block body_block %}
+
+{% block serach_block %}
+{% endblock %}
+
+<div class="container">
+        <div class="jumbotron">
+    <div class="container">
+
+    <form method="post" enctype="multipart/form-data" >
+
+        <p class="text-center">Create Post</p>
+        {% csrf_token %}
+{#        {% bootstrap_form form %}#}
+{#        <button type="submit" class="btn btn-dark">Create</button>#}
+
+
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}">Title: {{ form.title }}</label>
+            <label for="{{ form.post_pic.id_for_label }}"><input onchange="PreviewImage();" type="file" id="files" value="{{ form.post_pic }}"></label>
+            <img id="image" style="width: 170px; height: 200px; object-fit: cover" />
+        </div>
+
+
+            <p>{{ form.info }}</p>
+
+            <button type="submit" class="btn btn-dark">Create</button>
+        </form>
+
+    </form>
+        </div>
+</div>
+</div>
+
+
+ <script type="text/javascript">
+        document.getElementById("files").onchange = function () {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        // get loaded data and render thumbnail.
+        document.getElementById("image").src = e.target.result;
+    };
+
+    // read the image file as a data URL.
+    reader.readAsDataURL(this.files[0]);
+};
+    </script>
+
+
+{% endblock %}

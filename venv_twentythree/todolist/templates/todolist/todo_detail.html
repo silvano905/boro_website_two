@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block %}
+
+<div class="container">
+    <div class="card text-white bg-info mb-3">
+    {% if todo.todo_pic %}
+        <img class="card-img-top" src="{{ todo.todo_pic.url }}" alt="Card image cap">
+    {% endif %}
+        <div class="card-body">
+            <p class="text-center">{{ todo.title }}</p>
+            <p class="card-text">{{ todo.info }}</p>
+            <p class="card-text">Completed: {{ todo.complete }}</p>
+            <p class="card-title"><a href="{% url 'todo:for_user' username=todo.user.username %}" style="color: #1A01CC">@{{ todo.user.username }}</a></p>
+            <p class="card-text">Published on: {{todo.created_date|date:"D M Y"}}</p>
+            <p class="card-text"><a href="{% url 'comments:add_suggestion_to_todo' pk=todo.pk %}" class="btn btn-light">Add Suggestion</a></p>
+            {% if user.is_authenticated and todo.user == request.user%}
+        <a href="{% url 'todo:remove_todo_individual' pk=todo.pk %}" class="btn btn-danger">Remove</a>
+    {% endif %}
+        </div>
+        <div class="card-footer text-muted">
+            {{ todo.suggestions.count }} suggestion{{ todo.suggestions.count|pluralize }}
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
+    <div class="jumbotron">
+    <br>
+    <div class="d-flex align-items-center flex-column">
+    {% if todo.suggestions.count %}
+
+    {% for suggestions in suggestion_list %}
+
+        {% if suggestions.todo == todo %}
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    {% if request.user != suggestions.author%}
+                    <p class="card-text"><a href="{% url 'accounts:detail' pk=suggestions.author.profiles.pk %}">{{ suggestions.author }}</a></p>
+                        {% else %}
+                        <p>{{ suggestions.author }}</p>
+                        {% endif %}
+                    <p class="card-text">Text: {{ suggestions.text }}</p>
+                </div>
+                <div class="card-footer text-muted"><p>Date: {{ suggestions.created_date }}</p>
+                </div>
+            </div>
+
+            {% endif %}
+    {% endfor %}
+    </div>
+
+    {% else %}
+          <div class="container">
+            <div align="center">
+                <p><strong>No Suggestions</strong></p>
+            </div>
+        </div>
+    {% endif %}
+
+    </div>
+</div>
+{% endblock %}

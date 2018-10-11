@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'main.html'%}
+{% load bootstrap4 %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block%}
+
+    <div class="container">
+        <div class="jumbotron">
+
+    <form method="post">
+
+        <p class="text-center">Login Please</p>
+
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" value="Login" class="btn btn-default">
+        <a href="{% url 'password_reset' %}">Forgot Password?</a>
+
+    </form>
+        </div>
+    </div>
+
+{% endblock %}

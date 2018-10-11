@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% load bootstrap4 %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block %}
+
+
+    <div class="container">
+    <div class="jumbotron">
+    <form method="post" enctype="multipart/form-data" >
+
+        <p class="text-center">Update Profile</p>
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-6 col-sm-4">
+                <label for="{{ form.username.id_for_label }}">Username: {{ form.username }}</label>
+            </div>
+            <div class="col-6 col-sm-4">
+                <label for="{{ formm.description.id_for_label }}">Description: {{ formm.description }}</label>
+            </div>
+        </div>
+
+        <img src="{{ image.url }}" style="width: 160px; height: 200px; object-fit: cover"><br>
+
+
+        <label for="{{ formm.profile_pic.id_for_label }}">{{ formm.profile_pic }}</label><br>
+        <img id="image" style="width: 160px; height: 200px; object-fit: cover"><br>
+
+        <button type="submit" class="btn btn-dark">Submit</button>
+
+    </form>
+        </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block %}
+
+    <div class="container">
+        <div class="jumbotron">
+            <div class="d-flex justify-content-center">
+
+  <form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete "{{object}}"?</p>
+    <input type="submit" value="Delete" class="btn btn-outline-danger">
+  </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

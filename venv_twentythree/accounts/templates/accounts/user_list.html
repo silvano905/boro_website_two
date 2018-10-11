@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% block body_block%}
+
+    <form method="GET" action="{% url 'accounts:list'%}" class="form-inline">
+
+        {% csrf_token %}
+        <div class="input-group input-group-lg">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-lg">Search users</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" name="q">
+            <button type="submit" class="btn btn-dark">GO</button>
+
+</div>
+
+    </form>
+
+
+
+
+    {% for user in object_list %}
+        <a href="{{user.id}}">{{ user.user }}</a> <br>
+    {% endfor %}
+
+{% endblock %}

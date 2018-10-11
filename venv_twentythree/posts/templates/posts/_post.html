@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+
+<div class="container">
+
+    <div class="card text-white bg-dark mb-3">
+    {% if post.post_pic %}
+        <img class="card-img-top" src="{{ post.post_pic.url }}" alt="Card image cap">
+    {% endif %}
+        <div class="card-body">
+            <p class="text-center" style="color: #afd9ee">{{ post.title }}</p>
+            <p class="card-text">{{ post.info }}</p>
+            <p class="card-title"><a href="{% url 'posts:for_user' username=post.author.username %}">@{{ post.author.username }}</a></p>
+            <p class="card-text">Published on: {{post.created_date|date:"D M Y"}}</p>
+            <div class="card-text">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <a href="{% url 'comments:add_comment_to_post' pk=post.pk %}" class="btn btn-light">Add Comment</a>
+
+                    <form method="POST" class="post-form" action="{% url 'posts:like_post' %}">
+                        {% csrf_token %}
+                        {% if is_liked %}
+                            <button type="submit" class="btn btn-primary" name="post_id" value="{{ post.id }}">Unlike</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary" name="post_id" value="{{ post.id }}">Like</button>
+                        {% endif %}
+
+                    </form>
+
+                </div>
+            </div>
+
+            {% if user.is_authenticated and post.author == user %}
+                <br>
+                <p class="card-text"><a href="{% url 'posts:post_remove' pk=post.pk%}" class="btn btn-outline-danger">Delete</a></p>
+            {% endif %}
+        </div>
+        <div class="card-footer text-muted">
+            {{ total_likes }} Like{{ total_likes|pluralize }}
+            {{ post.comments.count }} comment{{ post.comments.count|pluralize }}
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+
+        <div class="col">
+            <div class="jumbotron">
+                {% if post.members.count %}
+
+                <div class="row">
+                    {% for x in post.members.all %}
+                        <div class="col-md-4">
+                        <br>
+
+                        {% if x.user.profiles.profile_pic %}
+
+                            <div class="card" style="width: 10rem; height: 18rem">
+                              <img class="card-img-top likepic" src="{{ x.user.profiles.profile_pic.url }}" alt="Card image cap">
+                              <div class="card-body">
+                                  {% if request.user != x.user %}
+                                <h5 class="card-title"><a href="{% url 'accounts:detail' pk=x.user.profiles.id %}">{{ x }}</a></h5>
+                                      {% else %}
+                                <h5 class="card-title">{{ x }}</h5>
+
+                                      {% endif %}
+
+                              </div>
+                            </div>
+                        {% endif %}
+
+                        <br>
+                        <br>
+                        </div>{% if forloop.counter|divisibleby:"3" and not forloop.last %}
+                </div>
+                <div class="row">
+                                {% endif %}
+
+                    {% endfor %}
+                </div>
+                {% else %}
+                    <div class="container">
+                        <div align="center">
+                            <p><strong>No Likes</strong></p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+<br>
+<br>
+      <div class="col">
+            <div class="jumbotron">
+            <div align="center">
+                {% if post.comments.count %}
+
+                    <h3>Comments</h3>
+                    {% for comments in comment_list %}
+                        {% if comments.post == post %}
+
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    {% if request.user != comments.author %}
+                                    <p class="card-text"><a href="{% url 'accounts:detail' pk=comments.author.profiles.pk %}">{{ comments.author }}</a> </p>
+                                        {% else %}
+                                        <p>{{ comments.author }}</p>
+                                        {% endif %}
+                                    <p class="card-text">{{ comments.text }}</p>
+                                </div>
+                                <div class="card-footer text-muted"><p>Date: {{ comments.created_date }}</p>
+                                </div>
+                            </div>
+
+
+                        {% endif %}
+                        <br>
+
+                    {% endfor %}
+                {% else %}
+                    <div class="container">
+                        <div align="center">
+                            <p><strong>No Comments</strong></p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+            </div>
+      </div>
+
+
+  </div>
+</div>

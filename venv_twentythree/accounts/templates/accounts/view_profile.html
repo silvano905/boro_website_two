@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block%}
+
+
+    <div class="container">
+
+        <div class="row justify-content-start">
+            <div class="col-4">
+                <div style="width: 300px; height: 300px">
+                    <img src="{{ user.profiles.profile_pic.url }}" style="width: 100%; height: auto">
+                </div>
+            </div>
+            <div class="col-4">
+                <h5>username: {{ user.username }}</h5>
+                <p>first name: {{ user.first_name }}</p>
+                <p>last name: {{ user.last_name }}</p>
+                <p>email: {{ user.email }}</p>
+                <p>description: {{ user.profiles.description }}</p>
+                <p>gender: {{ user.profiles.gender }}</p>
+            </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}

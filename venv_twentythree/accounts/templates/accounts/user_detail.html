@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block%}
+
+
+{% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}
+
+
+<div class="d-flex justify-content-center">
+
+
+    <div class="card text-white bg-dark mb-3" style="width: 18rem;">
+    {% if user_list.profile_pic %}
+            <img class="card-img-top silvano" src="{{ user_list.profile_pic.url }}" alt="Card image cap">
+    {% endif %}
+            <div class="card-body">
+                <p class="card-text">username: {{ user_list.user.username }}</p>
+                <p class="card-text">description: {{ user_list.description }}</p>
+                <div class="card-text">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        {% if request.user in user_list.blocked_users.all or user_list.user in request.user.profiles.blocked_users.all%}
+                            <p>You can not message this user or add it to your friends list</p>
+                        {% else %}
+                            <a href="{% url 'message:add_message' pk=user_list.pk %}" class="btn btn-outline-primary">Message</a>
+
+                            <form method="POST" action="{% url 'friends:add_friend' pk=user_list.pk %}">
+                                {% csrf_token %}
+                                {{ form }}
+                                <input class="btn btn-outline-success" type="submit" value="add friend">
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                <form method="POST" action="{% url 'accounts:block_user' %}">
+                    {% csrf_token %}
+                    {% if is_blocked %}
+                        <button type="submit" class="btn btn-light" name="post_id" value="{{ user_list.pk }}">Unblock</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-outline-danger" name="post_id" value="{{ user_list.pk }}">Block</button>
+                    {% endif %}
+                </form>
+
+
+            </div>
+    </div>
+
+</div>
+
+
+
+
+
+    <br>
+
+<div class="jumbotron">
+
+<div class="d-flex justify-content-center">
+
+    <h1>Posts</h1>
+</div>
+    <br>
+
+    <div class="row">
+
+    {% for posts in post_list %}
+<div class="col-md-4">
+
+        <div class="card bg-light mb-3">
+            {% if posts.post_pic %}
+            <img class="card-img-top silvano" src="{{ posts.post_pic.url }}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="text-center"><a href="{% url 'posts:post_detail' pk=posts.pk %}">{{ posts.title }}</a></h5>
+                <p class="card-text">{{ posts.created_date }}</p>
+            </div>
+            <div class="footer">
+                <small class="text-muted"><a href="{% url 'comments:add_comment_to_post' pk=posts.pk %}" class="btn btn-light">Add Comment</a></small>
+                <small class="text-muted">{{ posts.likes.count }} Like{{ posts.likes.count|pluralize }}</small>
+                <small class="text-muted">{{ posts.comments.count }} comment{{ posts.comments.count|pluralize }}</small>
+            </div>
+            {% else %}
+        <div class="card-body">
+                <h5 class="text-center"><a href="{% url 'posts:post_detail' pk=posts.pk %}">{{ posts.title }}</a></h5>
+                <p class="card-text">{{ posts.post_info_summary }}</p>
+                <p class="card-text">{{ posts.created_date }}</p>
+            </div>
+            <div class="footer">
+                <small class="text-muted"><a href="{% url 'comments:add_comment_to_post' pk=posts.pk %}" class="btn btn-light">Add Comment</a></small>
+                <small class="text-muted">{{ posts.likes.count }} Like{{ posts.likes.count|pluralize }}</small>
+                <small class="text-muted">{{ posts.comments.count }} comment{{ posts.comments.count|pluralize }}</small>
+            </div>
+{% endif %}
+
+        </div>
+            </div>
+        {% if forloop.counter|divisibleby:"3" and not forloop.last %}
+            </div><div class="row">
+        {% endif %}
+
+    {% endfor %}
+    </div>
+
+</div>
+
+<br>
+
+
+<div class="jumbotron">
+<div class="d-flex justify-content-center">
+
+    <h1>Metas</h1>
+</div>
+    <br>
+    <div class="row">
+    {% for todo in todo_list %}
+        <div class="col-md-4">
+            <div class="card bg-light mb-3">
+                {% if todo.todo_pic %}
+                    <img class="card-img-top silvano" src="{{ todo.todo_pic.url }}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="text-center"><a href="{% url 'todo:single' username=todo.user.username pk=todo.id %}">{{ todo.title }}</a></h5>
+                        <p class="card-text">{{ todo.created_date }}</p>
+                    </div>
+                    <div class="footer">
+                        <small class="text-muted"><a href="{% url 'comments:add_suggestion_to_todo' pk=todo.pk %}" class="btn btn-light">Add Suggestion</a></small>
+                        <small class="text-muted">{{ todo.suggestions.count }} suggestion{{ todo.suggestions.count|pluralize }}</small>
+                    </div>
+                {% else %}
+                <div class="card-body">
+                        <h5 class="text-center"><a href="{% url 'todo:single' username=todo.user.username pk=todo.id %}">{{ todo.title }}</a></h5>
+                        <p class="card-text">{{ todo.meta_info_summary }}</p>
+                        <p class="card-text">{{ todo.created_date }}</p>
+                    </div>
+                    <div class="footer">
+                        <small class="text-muted"><a href="{% url 'comments:add_suggestion_to_todo' pk=todo.pk %}" class="btn btn-light">Add Suggestion</a></small>
+                        <small class="text-muted">{{ todo.suggestions.count }} suggestion{{ todo.suggestions.count|pluralize }}</small>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:"3" and not forloop.last %}
+            </div><div class="row">
+        {% endif %}
+
+    {% endfor %}
+               </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block %}
+
+<div class="jumbotron">
+    {% if post_list %}
+
+<div class="d-flex justify-content-center">
+
+    <h2>All posts from {{ post_user }}</h2>
+    <br>
+</div>
+
+    <div class="row">
+
+        {% for post in post_list %}
+
+            <div class="col-md-4">
+                <div class="card text-white bg-dark mb-3">
+                    {% if post.post_pic %}
+                        <img class="card-img-top silvano" src="{{ post.post_pic.url }}" alt="Card image cap">
+                        <div class="card-body">
+                            <p class="text-center"><a href="{% url 'posts:post_detail' pk=post.id %}">{{ post.title }}</a></p>
+                            <p class="card-text">Published on: {{post.created_date|date:"D M Y"}}</p>
+                            <div class="card-text">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                {% if user.is_authenticated and post.author == user %}
+                                    <a href="{% url 'posts:post_remove' pk=post.pk%}" class="btn btn-outline-danger">Delete</a>
+                                    <a href="{% url 'posts:post_edit' pk=post.pk%}" class="btn btn-outline-info">Edit</a>
+                                {% endif %}
+                                </div>
+                            </div>
+                            <br>
+                            <p class="card-text"><a href="{% url 'comments:add_comment_to_post' pk=post.pk %}" class="btn btn-light">Add Comment</a></p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            {{ post.likes.count }} Like{{ post.likes.count|pluralize }}
+                            {{ post.comments.count }} comment{{ post.comments.count|pluralize }}
+                        </div>
+                    {% else %}
+                        <div class="card-body">
+                            <p class="text-center"><a href="{% url 'posts:post_detail' pk=post.id %}">{{ post.title }}</a></p>
+                            <p class="card-text">{{ post.post_info_summary }}</p>
+                            <p class="card-text">Published on: {{post.created_date|date:"D M Y"}}</p>
+                            <div class="card-text">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                {% if user.is_authenticated and post.author == user %}
+                                    <a href="{% url 'posts:post_remove' pk=post.pk%}" class="btn btn-outline-danger">Delete</a>
+                                    <a href="{% url 'posts:post_edit' pk=post.pk%}" class="btn btn-outline-info">Edit</a>
+                                {% endif %}
+                                </div>
+                            </div>
+                            <br>
+                            <p class="card-text"><a href="{% url 'comments:add_comment_to_post' pk=post.pk %}" class="btn btn-light">Add Comment</a></p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            {{ post.likes.count }} Like{{ post.likes.count|pluralize }}
+                            {{ post.comments.count }} comment{{ post.comments.count|pluralize }}
+                        </div>
+                {% endif %}
+
+                </div>
+
+            </div>
+                    {% if forloop.counter|divisibleby:"3" and not forloop.last %}
+                </div><div class="row">
+            {% endif %}
+
+            <br>
+
+        {% endfor %}
+
+
+    </div>
+
+{% else %}
+        <div class="d-flex justify-content-center">
+        <p>No Posts</p>
+        </div>
+{% endif %}
+
+
+</div>
+
+{% endblock %}
+

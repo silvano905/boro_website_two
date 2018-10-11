@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+
+{% block body_block %}
+
+    <link rel="stylesheet" href="{% static 'css/my_style.css' %}" />
+
+
+{% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}
+
+
+<div class="container">
+    <div class="jumbotron">
+
+<div class="text-center"><h2>WHAT DO YOU WANT TO ADD TO YOUR META LIST?</h2></div>
+<br>
+
+        <form action="{% url 'todolist:add' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Title: {{ form.title }}</label>
+                <label for="{{ form.todo_pic.id_for_label }}"><input onchange="PreviewImage();" type="file" id="files" value="{{ form.todo_pic }}"></label>
+                <img id="image" style="width: 170px; height: 200px; object-fit: cover" />
+            </div>
+
+
+            <p>{{ form.info }}</p>
+
+            <button type="submit" class="btn btn-dark">ADD</button>
+        </form>
+
+        <br>
+        <br>
+
+<div class="d-flex justify-content-center">
+        <a href="{% url 'todolist:deletecomplete' %}"><button type="button" class="btn btn-dark"> DELETE COMPLETED</button></a>
+        <a href="{% url 'todolist:deleteall' %}"><button type="button" class="btn btn-danger">DELETE ALL</button></a>
+</div>
+        <br>
+        <br>
+
+
+         <div style="margin-left: 55px">
+    <div class="row">
+        {% for todo in todo_list %}
+            <div class="col-md-3">
+            <div class="card" style="width: 12rem; height: 12rem">
+                {% if todo.complete %}
+
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'todo:single' username=todo.user.username pk=todo.pk %}">{{ todo.meta_title_summary }}</a></p>
+                    <button type="button" class="btn btn-success btn-lg btn-block">Completed</button>
+                    <p class="card-link"></p><a href="{% url 'todo:remove_todo_individual' pk=todo.pk%}" class="btn btn-outline-danger">delete</a>
+                </div>
+                {% else %}
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'todo:single' username=todo.user.username pk=todo.pk %}">{{ todo.meta_title_summary }}</a></p>
+                    <p class="card-text"><a href="{% url 'todolist:complete' todo.pk %}" class="btn btn-outline-primary">Complete</a></p>
+                    <p class="card-text"><a href="{% url 'todo:remove_todo_individual' pk=todo.pk %}" class="btn btn-outline-danger">delete</a></p>
+                </div>
+                            {% endif %}
+            </div>
+
+
+                        </div>
+        {% if forloop.counter|divisibleby:"4" and not forloop.last %}
+            </div><div class="row">
+        {% endif %}
+        {% endfor %}
+           </div>
+        </div>
+
+    </div>
+    </div>
+
+ <script type="text/javascript">
+        document.getElementById("files").onchange = function () {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        // get loaded data and render thumbnail.
+        document.getElementById("image").src = e.target.result;
+    };
+
+    // read the image file as a data URL.
+    reader.readAsDataURL(this.files[0]);
+};
+    </script>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+

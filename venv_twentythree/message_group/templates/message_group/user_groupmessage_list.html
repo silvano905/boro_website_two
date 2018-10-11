@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block %}
+
+<div class="d-flex justify-content-center">
+    <p>{{ friend_user }}</p>
+</div>
+
+        <div class="container">
+        <div class="jumbotron">
+        {% if groupmessage_list %}
+    <div class="row">
+
+    {% for members in groupmessage_list %}
+
+<div class="col-md-4">
+
+        <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <p class="card-text">user: {{ members.user }}</p>
+                    <p class="card-text">member: {{ members.member.user }}</p>
+                    <div class="card-text">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="{% url 'accounts:detail_messages' pk=members.member.user.profiles.pk %}" class="btn btn-outline-warning">View Messages</a>
+                            <a href="{% url 'group_message:member_remove' pk=members.member.pk %}" class="btn btn-outline-danger">Remove</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+                    </div>
+        {% if forloop.counter|divisibleby:"3" and not forloop.last %}
+            </div><div class="row">
+        {% endif %}
+
+    {% endfor %}
+       </div>
+        {% else %}
+            <div class="container">
+                <div align="center">
+                    <p><strong>No Messages</strong></p>
+                </div>
+            </div>
+        {% endif %}
+        </div>
+        </div>
+
+
+{% endblock %}

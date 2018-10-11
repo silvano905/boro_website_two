@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block %}
+
+    <h2>User_mymessages</h2>
+    <br>
+
+    {% for mensaje in message_list %}
+
+        <br>
+        <p>from: {{ mensaje.author }}</p>
+        <p>Recipient: {{ mensaje.recipient }}</p>
+        <p>Text: {{ mensaje.text }}</p>
+
+    <a href="{% url 'message:add_message' pk=mensaje.recipient.pk %}" class="btn btn-primary">Respond</a>
+        <br>
+
+    {% endfor %}
+
+
+{% endblock %}
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% extends "main.html" %}
+
+{% block serach_block %}
+{% endblock %}
+
+{% block body_block %}
+
+<div class="jumbotron">
+
+{%  if todo_list %}
+    <div class="d-flex justify-content-center">
+        <h2>{{ todo_user }}</h2>
+    </div>
+    <br>
+
+    <div class="row">
+        {% for todo in todo_list %}
+
+            <div class="col-md-4">
+
+                <div class="card text-white bg-info mb-3">
+                    {% if todo.todo_pic %}
+                        <img class="card-img-top silvano" src="{{ todo.todo_pic.url }}" alt="Card image cap">
+                    <div class="card-body">
+                        <p class="text-center"><a href="{% url 'todo:single' username=todo.user.username pk=todo.id %}" style="color: #1A01CC">{{ todo.title }}</a></p>
+                        <p class="card-text" style="color: #2C2C2C">Completed: {{ todo.complete }}</p>
+                        <p class="card-title" style="color: #2C2C2C">@{{ todo.user.username }}</p>
+                        <p class="card-text" style="color: #2C2C2C">Published on: {{todo.created_date|date:"D M Y"}}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <p style="color: #2C2C2C">{{ todo.suggestions.count }} suggestion{{ todo.suggestions.count|pluralize }}</p>
+                    </div>
+                    {% else %}
+                        <div class="card-body">
+                            <p class="text-center"><a href="{% url 'todo:single' username=todo.user.username pk=todo.id %}" style="color: #1A01CC">{{ todo.title }}</a></p>
+                            <p class="card-text" style="color: #2C2C2C">{{ todo.meta_info_summary }}</p>
+                            <p class="card-text" style="color: #2C2C2C">Completed: {{ todo.complete }}</p>
+                            <p class="card-title" style="color: #2C2C2C">@{{ todo.user.username }}</p>
+                            <p class="card-text" style="color: #2C2C2C">Published on: {{todo.created_date|date:"D M Y"}}</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <p style="color: #2C2C2C">{{ todo.suggestions.count }} suggestion{{ todo.suggestions.count|pluralize }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+    {% if forloop.counter|divisibleby:"3" and not forloop.last %}
+    </div>
+    <div class="row">
+    {% endif %}
+
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="d-flex justify-content-center">
+    <p>No Metas</p>
+    </div>
+{% endif %}
+
+</div>
+
+{% endblock %}

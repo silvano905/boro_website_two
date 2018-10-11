@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+
+<div class="jumbotron">
+    <div class="row">
+
+
+        <div class="col">
+            <div class="row">
+        {% for todo in meta_list %}
+            <div class="col-md-6">
+
+
+
+                    <div class="card text-white bg-info mb-3">
+            {% if todo.todo_pic %}
+                <img class="card-img-top silvano" src="{{ todo.todo_pic.url }}" alt="Card image cap">
+
+                <div class="card-body">
+                    <p class="text-center"><a href="{% url 'todo:single' username=todo.user.username pk=todo.id %}" style="color: darkblue">{{ todo.title }}</a></p>
+                    <p class="card-text" style="color: #080808">Completed: {{ todo.complete }}</p>
+                    <p class="card-title"><a href="{% url 'todo:for_user' username=todo.user.username %}" style="color: darkblue">@{{ todo.user.username }}</a></p>
+                </div>
+                <div class="card-footer text-muted">
+                    <p style="color: #2C2C2C">{{ todo.suggestions.count }} suggestion{{ todo.suggestions.count|pluralize }}</p>
+                </div>
+            {% else %}
+                <div class="card-body">
+                    <p class="text-center"><a href="{% url 'todo:single' username=todo.user.username pk=todo.id %}" style="color: darkblue">{{ todo.title }}</a></p>
+                    <p class="card-text" style="color: #080808">{{ todo.meta_info_summary }}</p>
+                    <p class="card-text" style="color: #080808">Completed: {{ todo.complete }}</p>
+                    <p class="card-title"><a href="{% url 'todo:for_user' username=todo.user.username %}" style="color: darkblue">@{{ todo.user.username }}</a></p>
+                </div>
+                <div class="card-footer text-muted">
+                    <p style="color: #2C2C2C">{{ todo.suggestions.count }} suggestion{{ todo.suggestions.count|pluralize }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+
+            </div>
+
+            {% if forloop.counter|divisibleby:"2" and not forloop.last %}
+            </div><div class="row">
+            {% endif %}
+
+        {% endfor %}
+
+                </div>
+        </div>
+
+
+
+        <div class="col">
+            <div class="row">
+        {% for post in post_list %}
+            <div class="col-md-6">
+
+
+                            <div class="card text-white bg-dark mb-3">
+                    {% if post.post_pic %}
+                        <img class="card-img-top silvano" src="{{ post.post_pic.url }}" alt="Card image cap">
+                        <div class="card-body">
+                            <p class="text-center"><a href="{% url 'posts:post_detail' pk=post.id %}">{{ post.title }}</a></p>
+                            <p class="card-text"><a href="{% url 'posts:for_user' username=post.author.username %}">@{{ post.author.username }}</a></p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            {{ post.likes.count }} Like{{ post.likes.count|pluralize }}
+                            {{ post.comments.count }} comment{{ post.comments.count|pluralize }}
+                        </div>
+                    {% else %}
+                        <div class="card-body">
+                            <p class="text-center"><a href="{% url 'posts:post_detail' pk=post.id %}">{{ post.title }}</a></p>
+                            <p class="card-text">{{ post.post_info_summary }}</p>
+                            <p class="card-text"><a href="{% url 'posts:for_user' username=post.author.username %}">@{{ post.author.username }}</a></p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            {{ post.likes.count }} Like{{ post.likes.count|pluralize }}
+                            {{ post.comments.count }} comment{{ post.comments.count|pluralize }}
+                        </div>
+                    {% endif %}
+                </div>
+
+
+
+            </div>
+
+            {% if forloop.counter|divisibleby:"2" and not forloop.last %}
+            </div><div class="row">
+            {% endif %}
+
+        {% endfor %}
+
+                </div>
+
+        </div>
+
+
+     </div>
+
+{#<div class="d-flex justify-content-center">#}
+{##}
+{#        <div class="pagination">#}
+{##}
+{#    {% if t_list.has_other_pages %}#}
+{##}
+{#    {% if t_list.has_previous %}#}
+{#      <a href="?page={{ t_list.previous_page_number }}" class="pagination_numbers">&laquo;</a>#}
+{##}
+{#    {% else %}#}
+{#      <div class="disabled pagination_numbers"><span>&laquo;</span></div>#}
+{##}
+{#    {% endif %}#}
+{##}
+{#    {% for i in t_list.paginator.page_range %}#}
+{##}
+{#      {% if t_list.number == i %}#}
+{#        <div class="pagination_numbers"><span> {{ i }} </span></div>#}
+{##}
+{##}
+{#      {% else %}#}
+{#        <a href="?page={{ i }}" class="pagination_numbers">{{ i }}</a>#}
+{##}
+{#      {% endif %}#}
+{#    {% endfor %}#}
+{##}
+{#    {% if t_list.has_next %}#}
+{#      <a href="?page={{ t_list.next_page_number }}" class="pagination_numbers">&raquo;</a>#}
+{##}
+{#    {% else %}#}
+{#      <div class="disabled pagination_numbers"><span>&raquo;</span></div>#}
+{##}
+{#    {% endif %}#}
+{##}
+{##}
+{#{% endif %}#}
+{#    </div>#}
+{##}
+{#</div>#}
+
+</div>
